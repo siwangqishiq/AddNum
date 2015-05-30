@@ -15,6 +15,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	public static final Assets instance = new Assets();
 	private AssetManager assetManager;
 
+	public AssetFonts fonts;
 	public AssetBunny bunny;
 	public AssetRock rock;
 	public AssetGoldCoin goldCoin;
@@ -34,7 +35,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		assetManager.finishLoading();
 
 		TextureAtlas atlas = assetManager.get(Constants.TEXTURE_ATLAS_OBJECTS);
-		// enable texture filtering for pixel smoothing
+		// ³õÊ¼»¯×ÖÌå
+		fonts = new AssetFonts();
 		for (Texture t : atlas.getTextures())
 			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
@@ -54,5 +56,6 @@ public class Assets implements Disposable, AssetErrorListener {
 	@Override
 	public void dispose() {
 		assetManager.dispose();
+		fonts.dispose();
 	}
 }// end class
