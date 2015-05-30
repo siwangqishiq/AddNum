@@ -8,7 +8,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
+import com.xinlan.demo2.asset.Assets;
 
 public class WorldController extends InputAdapter {
 	private static final String TAG = WorldController.class.getName();
@@ -114,6 +117,26 @@ public class WorldController extends InputAdapter {
 	}
 
 	private void initTestObjects() {
+		testSprites = new Sprite[5];
+		Array<TextureRegion> regions = new Array<TextureRegion>();
+		regions.add(Assets.instance.bunny.head);
+		regions.add(Assets.instance.feather.feather);
+		regions.add(Assets.instance.goldCoin.goldCoin);
+
+		for (int i = 0; i < testSprites.length; i++) {
+			Sprite spr = new Sprite(regions.random());
+			spr.setSize(1, 1);
+			spr.setOrigin(spr.getWidth() / 2.0f, spr.getHeight() / 2.0f);
+			float randomX = MathUtils.random(-2.0f, 2.0f);
+			float randomY = MathUtils.random(-2.0f, 2.0f);
+			spr.setPosition(randomX, randomY);
+			testSprites[i] = spr;
+		}//end for i
+
+		selectedSprite = 0;
+	}
+
+	private void initTestObjects2() {
 		testSprites = new Sprite[5];
 		int width = 32;
 		int height = 32;

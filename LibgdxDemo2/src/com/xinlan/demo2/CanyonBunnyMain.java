@@ -3,7 +3,9 @@ package com.xinlan.demo2;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.xinlan.demo2.asset.Assets;
 
 public class CanyonBunnyMain implements ApplicationListener {
 	private static final String TAG = CanyonBunnyMain.class.getName();
@@ -13,6 +15,8 @@ public class CanyonBunnyMain implements ApplicationListener {
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		Assets.instance.init(new AssetManager());
+		
 		worldController = new WorldController();
 		worldRenderer = new WorldRenderer(worldController);
 	}
@@ -36,6 +40,7 @@ public class CanyonBunnyMain implements ApplicationListener {
 	@Override
 	public void dispose() {
 		worldRenderer.dispose();
+		Assets.instance.dispose();
 	}
 
 	@Override
@@ -45,6 +50,6 @@ public class CanyonBunnyMain implements ApplicationListener {
 
 	@Override
 	public void resume() {
-
+		Assets.instance.init(new AssetManager());
 	}
 }// end class
