@@ -1,5 +1,7 @@
 package com.xinlan.demo2.gameobjects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.xinlan.demo2.Constants;
@@ -26,6 +28,8 @@ public class BunnyHead extends AbstractGameObject {
 	public boolean hasFeatherPowerup;
 	public float timeLeftFeatherPowerup;
 
+	public ParticleEffect dustParticles = new ParticleEffect();
+
 	public BunnyHead() {
 		init();
 	}
@@ -43,6 +47,11 @@ public class BunnyHead extends AbstractGameObject {
 		timeJumping = 0;
 		hasFeatherPowerup = false;
 		timeLeftFeatherPowerup = 0;
+
+		// Particles
+		dustParticles.load(Gdx.files.internal("data/particles/dust.pfx"),
+				Gdx.files.internal("data/particles"));
+
 	}
 
 	public void setJumping(boolean jumpKeyPressed) {
@@ -94,6 +103,8 @@ public class BunnyHead extends AbstractGameObject {
 				setFeatherPowerup(false);
 			}
 		}
+
+		dustParticles.update(deltaTime);
 	}
 
 	@Override
@@ -101,6 +112,11 @@ public class BunnyHead extends AbstractGameObject {
 		switch (jumpState) {
 		case GROUNDED:
 			jumpState = JUMP_STATE.FALLING;
+			if (velocity.x != 0) {
+				dustParticles.setPosition(position.x + dimension.x / 2,
+						position.y);
+				dustParticles.start();
+			}
 			break;
 		case JUMP_RISING:
 			// Keep track of jump time
@@ -111,7 +127,7 @@ public class BunnyHead extends AbstractGameObject {
 				velocity.y = terminalVelocity.y;
 			}
 			break;
-		case FALLING:
+		case FALLING: 
 			break;
 		case JUMP_FALLING:
 			// Add delta times to track jump time
@@ -122,13 +138,17 @@ public class BunnyHead extends AbstractGameObject {
 				velocity.y = terminalVelocity.y;
 			}
 		}
-		if (jumpState != JUMP_STATE.GROUNDED)
+		if (jumpState != JUMP_STATE.GROUNDED) {
+			dustParticles.allowCompletion();
 			super.updateMotionY(deltaTime);
+		}
 	}
 
 	@Override
 	public void render(SpriteBatch batch) {
 		TextureRegion reg = null;
+		// Á£×ÓÐ§¹û
+		dustParticles.draw(batch);
 		// Set special color when game object has a feather power-up
 		if (hasFeatherPowerup)
 			batch.setColor(1.0f, 0.8f, 0.0f, 1.0f);
